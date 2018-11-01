@@ -1,9 +1,9 @@
 #include "MIDIcontroller.h"
 
 /*This is an example of how to use
-  potentiometers, analog sensors piezos as a velocity 
+  potentiometers, analog sensors piezos as a velocity
   sensitive input, buttons and capacitive sensors.
-  
+
   The use of a photocell or FSR will be
   demonstrated. I'ts wired like so:
   3.3v--(PHOTO CELL)---\
@@ -23,7 +23,8 @@
 
 byte MIDIchannel = 1;
 const int sensPin = A4; // Change this to the ANALOG pin you want to use.
-const int potPin = A3;  // Change this to the ANALOG pin you want to use
+const int potPin1 = A3;  // Change this to the ANALOG pin you want to use
+const int potPin2 = A5;  // Change this to the ANALOG pin you want to use
 const int drumPin = A2; // Change this to the correct ANALOG pin
 const int touchPin = A1; //any Capacitive Touch capable pin
 const int latchPin = A0; //any digital pin
@@ -38,26 +39,29 @@ MIDIpot mySensor(sensPin, 22);
 // When KILL is enabled, separate CC messages (with a different number) will be sent
 // when you turn the pot all the way down and when you start turning it up again.
 // Simply omit the "KILL" argument if you don't want that.
-MIDIpot myPot(potPin, 23, KILL);
+MIDIpot myPot1(potPin1, 23, KILL); //sends a cc message to the next cc channel when potPin hits 0
+MIDIpot myPot2(potPin2, 27, KILL); //sends a cc message to the next cc channel when potPin hits 0
 
 // Drum Parameters are: pin, note number
 MIDIdrum myDrum(drumPin, 38);
 
 // MOMENTARY buttons are the default. LATCH or TRIGGER may also be set
-MIDIbutton triggerButton(touchPin, 24, MOMENTARY, 5000); // CC #15, capacitive touch threshold 5000
-MIDIbutton latchButton(latchPin, 25, MOMENTARY);           // Control Change #21
+MIDIbutton triggerButton(touchPin, 25, MOMENTARY, 5000); // CC #15, capacitive touch threshold 5000
+MIDIbutton latchButton(latchPin, 26, MOMENTARY);           // Control Change #21
 
-void setup(){
+void setup() {
   // Use the rangeFinder example to find the usable range of your sensor
   // and call inputRange() with the lowest and highest values.
   mySensor.inputRange(350, 950);
   pinMode(ledPin, OUTPUT);
 }
 
-void loop(){
+void loop() {
   mySensor.send();
-    myPot.send();
-      myDrum.send();
+  myPot1.send();
+  myPot2.send();
+
+  myDrum.send();
   //myDrum.send(64); could be used for a fixed velocity e.g. 64
   latchButton.send();
   triggerButton.send();
@@ -114,7 +118,7 @@ void loop(){
      80    G# 4   Mute Triangle
      81    A  4   Open Triangle
 
-CC number and Description  (MSB = Most Significant Byte https://www.sweetwater.com/insync/msb-lsb-applications/)
+  CC number and Description  (MSB = Most Significant Byte https://www.sweetwater.com/insync/msb-lsb-applications/)
   0 Bank Select (MSB)(followed by cc32 & Program Change)
   1 Modulation Wheel
   2 Breath controller
@@ -174,20 +178,20 @@ CC number and Description  (MSB = Most Significant Byte https://www.sweetwater.c
   92 Tremolo Level
   93 Chorus Level
   94 Celeste Level or Detune
-  95 Phaser Level  
-  *It's probably best not to use the group below for assigning controllers.
+  95 Phaser Level
+   It's probably best not to use the group below for assigning controllers.
   96 Data Button increment
   97 Data Button decrement
   98 Non-registered Parameter (LSB)
   99 Non-registered Parameter (MSB)
   100 Registered Parameter (LSB)
-  101 Registered Parameter (MSB)  
-  *It's very important that you do not use these no matter what unless you want to invoke these functions
+  101 Registered Parameter (MSB)
+   It's very important that you do not use these no matter what unless you want to invoke these functions
   120 All Sound Off
   121 All Controllers Off
   122 Local Keyboard (on/off) You might actually crash your keyboard if you use this one.
-  123 All Notes Off  
-  *You typically don't want your synths to change modes on you in the middle of making a song, so don't use these.)
+  123 All Notes Off
+   You typically don't want your synths to change modes on you in the middle of making a song, so don't use these.)
   124 Omni Mode Off
   125 Omni Mode On
   126 Mono Operation
