@@ -6,6 +6,7 @@
 #include "MIDIenc.h"
 #include "MIDIcapSens.h"
 #include "MIDIdrum.h"
+#include "MIDIbuttonNoteChange.h"
 //Bounce, Flicker and Encoder libraries are also required
 
 #endif

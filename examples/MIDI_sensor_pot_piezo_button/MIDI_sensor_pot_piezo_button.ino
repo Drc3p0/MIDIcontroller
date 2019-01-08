@@ -22,12 +22,22 @@
 */
 
 byte MIDIchannel = 1;
-const int sensPin = A4; // Change this to the ANALOG pin you want to use.
-const int potPin1 = A3;  // Change this to the ANALOG pin you want to use
-const int potPin2 = A5;  // Change this to the ANALOG pin you want to use
-const int drumPin = A2; // Change this to the correct ANALOG pin
-const int touchPin = A1; //any Capacitive Touch capable pin
-const int latchPin = A0; //any digital pin
+int prev_val1;
+
+const int sensPin = A6; // Change this to the ANALOG pin you want to use.
+const int potPin1 = A5;  // Change this to the ANALOG pin you want to use
+const int potPin2 = A4;  // Change this to the ANALOG pin you want to use
+const int potPin3 = A3;  // Change this to the ANALOG pin you want to use
+const int potPin4 = A2;  // Change this to the ANALOG pin you want to use
+const int potPin5 = A1;  // Change this to the ANALOG pin you want to use
+const int potPin6 = A0;  // Change this to the ANALOG pin you want to use
+
+const int drumPin = A7; // Change this to the correct ANALOG pin
+const int touchPin = 0; //any Capacitive Touch capable pin
+const int latchPin1 = 12; //any digital pin
+const int latchPin2 = 11; //any digital pin
+const int latchPin3 = 10; //any digital pin
+const int latchPin4 = 9; //any digital pin
 
 const int ledPin = 13;   //Set an LED to show the state of a latch button.
 
@@ -39,33 +49,55 @@ MIDIpot mySensor(sensPin, 22);
 // When KILL is enabled, separate CC messages (with a different number) will be sent
 // when you turn the pot all the way down and when you start turning it up again.
 // Simply omit the "KILL" argument if you don't want that.
-MIDIpot myPot1(potPin1, 23, KILL); //sends a cc message to the next cc channel when potPin hits 0
-MIDIpot myPot2(potPin2, 27, KILL); //sends a cc message to the next cc channel when potPin hits 0
+MIDIpot myPot1(potPin1, 23); //sends a cc message to the next cc channel when potPin hits 0
+MIDIpot myPot2(potPin2, 24); //sends a cc message to the next cc channel when potPin hits 0
+MIDIpot myPot3(potPin3, 25); //sends a cc message to the next cc channel when potPin hits 0
+MIDIpot myPot4(potPin4, 26); //sends a cc message to the next cc channel when potPin hits 0
+MIDIpot myPot5(potPin5, 27); //sends a cc message to the next cc channel when potPin hits 0
+MIDIpot myPot6(potPin6, 28); //sends a cc message to the next cc channel when potPin hits 0
+
 
 // Drum Parameters are: pin, note number
 MIDIdrum myDrum(drumPin, 38);
 
 // MOMENTARY buttons are the default. LATCH or TRIGGER may also be set
-MIDIbutton triggerButton(touchPin, 25, MOMENTARY, 5000); // CC #15, capacitive touch threshold 5000
-MIDIbutton latchButton(latchPin, 26, MOMENTARY);           // Control Change #21
+MIDIbutton triggerButton(touchPin, 33, MOMENTARY, 5000); // CC #15, capacitive touch threshold 5000
+MIDIbutton latchButton1(latchPin1, 29, MOMENTARY);           // Control Change #21
+MIDIbutton latchButton2(latchPin2, 30, MOMENTARY);           // Control Change #21
+MIDIbutton latchButton3(latchPin3, 31, MOMENTARY);           // Control Change #21
+MIDIbutton latchButton4(latchPin4, 32, MOMENTARY);           // Control Change #21
 
 void setup() {
   // Use the rangeFinder example to find the usable range of your sensor
   // and call inputRange() with the lowest and highest values.
   mySensor.inputRange(350, 950);
   pinMode(ledPin, OUTPUT);
+
 }
 
 void loop() {
-  mySensor.send();
-  myPot1.send();
-  myPot2.send();
+//  mySensor.send();
 
-  myDrum.send();
+
+  myPot1.send(); 
+  myPot2.send();
+  myPot3.send();
+  myPot4.send();
+  myPot5.send();
+  myPot6.send();
+  
+//  myDrum.send();
   //myDrum.send(64); could be used for a fixed velocity e.g. 64
-  latchButton.send();
-  triggerButton.send();
-  digitalWrite(ledPin, latchButton.state);
+//  triggerButton.send();
+  
+
+  latchButton1.send();
+  latchButton2.send();
+  latchButton3.send();
+  latchButton4.send();
+
+
+  digitalWrite(ledPin, latchButton1.state);
 
 }
 

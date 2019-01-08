@@ -101,11 +101,13 @@ int MIDIpot::send(){
   int newValue = read();
   if (mode == true && newValue > outLo && value == outLo){  //ON before main msg
     usbMIDI.sendControlChange(number+1, 127, MIDIchannel);
+    MIDI.sendControlChange(number+1, 127, MIDIchannel);  //added for serial midi support
   }
   if (newValue >= 0){
     usbMIDI.sendControlChange(number, newValue, MIDIchannel);//MAIN MESSAGE
     if (mode == true && newValue == outLo && value >= outLo){//OFF after main
       usbMIDI.sendControlChange(number+1, 0, MIDIchannel);
+      MIDI.sendControlChange(number+1, 0, MIDIchannel); //added for serial midi support
     }
     value = newValue;
   }
