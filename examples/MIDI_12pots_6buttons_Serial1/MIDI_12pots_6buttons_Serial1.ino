@@ -1,8 +1,9 @@
+#include <MIDI.h>
+
 #include "MIDIcontroller.h"
 #include "MIDI.h"
-
 /*This is an example of how to use
-  potentiometers, analog sensors piezos as a velocity
+  potentiometers, analog sensors, piezos as a velocity
   sensitive input, buttons and capacitive sensors.
 
   The use of a photocell or FSR will be
@@ -21,9 +22,11 @@
     to the same analog pin on the microcontroller.
 
 */
+// IMPORTANT: these are globals - match names exactly!!!
+byte MIDIchannel = 1;   // (1 to 16) what channel you want the MIDI commands to be sent to
+byte MIDIcable = 0;     // (1 to 16) leave at 0 for now..you'll use Serial + MIDIx4 for values greater than 1 
+byte MIDIface = 0; // 0=USB, 1=Serial, 2=HostUSB  Serial is for hardware midi (use serial pin 1) 
 
-MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, MIDI); //declare serial pin output
-byte MIDIchannel = 1; // declare midi channel. byte is a variable somewhere from 0-255
 int prev_val1;
 byte velocity = 127;  //declare velocity amount for button presses
 
@@ -381,3 +384,6 @@ void loop() {
   126 Mono Operation
   127 Poly Operation
 */
+
+
+

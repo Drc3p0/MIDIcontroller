@@ -1,4 +1,4 @@
-#include "MIDIbutton.h"
+#include "MIDIcontroller.h"
 
 // constructors
 MIDIbutton::MIDIbutton() : Bounce(0, 0), Flicker(0, 0){};
@@ -57,22 +57,23 @@ int MIDIbutton::send(){
   int newValue = read();
   if (newValue == outHi){       // If the button's been pressed,
     if (state == false){        // and if it was latched OFF,
-      usbMIDI.sendControlChange(number,outHi,MIDIchannel); // send CC outHi,
-      newValue = number;
+      MIDI_Send(midi::ControlChange, number, outHi, MIDIchannel, NULL, MIDIcable, MIDIface);
+
+        newValue = number;
       state = true;             // Remember the button is now on.
     }
     else{                       // If the button was latched ON,
-      if (mode == 2){           // and the button's in TRIGGER mode(2),
-        usbMIDI.sendControlChange(number,outHi,MIDIchannel); // send CC outHi again 
-        newValue = number;
+      if (mode == 2){           // and the button's in TRIGGER mode(2)
+       MIDI_Send(midi::ControlChange, number, outHi, MIDIchannel, NULL, MIDIcable, MIDIface);
+		newValue = number;
       }
-      else {usbMIDI.sendControlChange(number,outLo,MIDIchannel);}// else send outLo,
+      else { MIDI_Send(midi::ControlChange, number, outLo, MIDIchannel, NULL, MIDIcable, MIDIface); }// else send outLo,
       state = false;            // Remember the button is now off.
       newValue = outLo;
     }
   }
   else if (newValue == outLo && mode == 0){// Button in MOMENTARY mode released?
-    usbMIDI.sendControlChange(number,outLo,MIDIchannel); // send CC outLo,
+    MIDI_Send(midi::ControlChange, number, outLo, MIDIchannel, NULL, MIDIcable, MIDIface); // send CC outLo,
     state = false;                         // Remember the button is now off
   }
   else {newValue = -1;}

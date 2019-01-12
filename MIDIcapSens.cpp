@@ -85,11 +85,21 @@ int MIDIcapSens::read(){
 
 int MIDIcapSens::send(){
   int newValue = read();
-  if (newValue >= 0){
-    usbMIDI.sendNoteOn(number, outHi, MIDIchannel);
-    value = newValue;
-  }
-  return newValue;
+//    int prevValue = 0; //testing
+
+//    if (newValue != prevValue) { //testing
+        
+        if (newValue >= 0){
+            usbMIDI.sendNoteOn(number, outHi, MIDIchannel);
+//         MIDI.sendNoteOn(number, outHi, MIDIchannel);  //send hardware midi note on
+            value = newValue;
+//           } else {
+          usbMIDI.sendNoteOff(number, outHi, MIDIchannel); //testing noteOff
+//        MIDI.sendNoteOn(number, outHi, MIDIchannel); //send hardware midi note off
+    }
+    return newValue;
+//    }
+//   prevValue = newValue; //testing
 };
 
 void MIDIcapSens::setNoteNumber(byte num){ // Set the NOTE number.

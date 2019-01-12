@@ -10,6 +10,8 @@
 #define TRIGGER 2
 
 extern byte MIDIchannel;
+extern byte MIDIcable;
+extern byte MIDIface;
 
 class MIDIbutton: public Bounce, public Flicker{
     bool inputType;

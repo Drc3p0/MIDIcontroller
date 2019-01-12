@@ -1,10 +1,16 @@
 #ifndef MIDIpot_h
 #define MIDIpot_h
 
+
 #include "Arduino.h"
+#include "MIDI.h"
 #define KILL 1
 
 extern byte MIDIchannel;
+
+
+//extern MidiInterface * SerialMidiList[1];
+
 
 class MIDIpot{
     int divider; // for converting from analog to MIDI resolution
